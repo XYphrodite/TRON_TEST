@@ -15,8 +15,16 @@ namespace TRON_TEST.Services
     internal class TronAPI
     {
         private readonly ILogger logger;
+#if DEBUG
         private string _baseUrl = "https://api.shasta.trongrid.io/v1/";
         private string _baseUrl_ = "https://api.shasta.trongrid.io/";
+#else
+        private string _baseUrl = "https://api.trongrid.io/";
+        private string _baseUrl_ = "https://api.trongrid.io/";
+        private string _tronApiKey = "25f66928-0b70-48cd-9ac6-da6f8247c663";
+#endif
+
+
 
         public TronAPI(ILogger logger)
         {
@@ -28,6 +36,9 @@ namespace TRON_TEST.Services
             var client = new RestClient(options);
             var request = new RestRequest("");
             request.AddHeader("accept", "application/json");
+#if RELEASE
+            request.AddHeader("TRON-PRO-API-KEY", _tronApiKey);
+#endif
             var response = await client.GetAsync(request);
 
             logger.Log(response.Content);
@@ -39,6 +50,9 @@ namespace TRON_TEST.Services
             var client = new RestClient(options);
             var request = new RestRequest("");
             request.AddHeader("accept", "application/json");
+#if RELEASE
+            request.AddHeader("TRON-PRO-API-KEY", _tronApiKey);
+#endif
             var response = await client.GetAsync(request);
 
             logger.Log(response.Content);
@@ -49,6 +63,9 @@ namespace TRON_TEST.Services
             var client = new RestClient(options);
             var request = new RestRequest("");
             request.AddHeader("accept", "application/json");
+#if RELEASE
+            request.AddHeader("TRON-PRO-API-KEY", _tronApiKey);
+#endif
             var response = await client.GetAsync(request);
 
             Console.WriteLine("{0}", response.Content);
@@ -60,6 +77,9 @@ namespace TRON_TEST.Services
             var client = new RestClient(options);
             var request = new RestRequest("");
             request.AddHeader("accept", "application/json");
+#if RELEASE
+            request.AddHeader("TRON-PRO-API-KEY", _tronApiKey);
+#endif
 
             Value value = new Value
             {
@@ -115,6 +135,9 @@ namespace TRON_TEST.Services
             var client = new RestClient(options);
             var request = new RestRequest("");
             request.AddHeader("accept", "application/json");
+#if RELEASE
+            request.AddHeader("TRON-PRO-API-KEY", _tronApiKey);
+#endif
             var jsonBody = JsonSerializer.Serialize(new
             {
                 transaction = "0A8A010A0202DB2208C89D4811359A28004098A4E0A6B52D5A730802126F0A32747970652E676F6F676C65617069732E636F6D2F70726F746F636F6C2E5472616E736665724173736574436F6E747261637412390A07313030303030311215415A523B449890854C8FC460AB602DF9F31FE4293F1A15416B0580DA195542DDABE288FEC436C7D5AF769D24206412418BF3F2E492ED443607910EA9EF0A7EF79728DAAAAC0EE2BA6CB87DA38366DF9AC4ADE54B2912C1DEB0EE6666B86A07A6C7DF68F1F9DA171EEE6A370B3CA9CBBB00"
@@ -131,12 +154,17 @@ namespace TRON_TEST.Services
             {
                 Method = HttpMethod.Post,
                 RequestUri = new Uri(_baseUrl_ + "/wallet/createtransaction"),
-                Headers = { { "accept", "application/json" }, },
+                Headers = { { "accept", "application/json" },
+                #if RELEASE
+                    {"TRON-PRO-API-KEY", _tronApiKey }
+#endif
+                },
                 Content = new StringContent("{\"owner_address\":\"TZ4UXDV5ZhNW7fb2AMSbgfAEZ7hWsnYS2g\",\"to_address\":\"TPswDDCAWhJAZGdHPidFg5nEf8TkNToDX1\",\"amount\":1000,\"visible\":true}")
                 {
                     Headers = { ContentType = new MediaTypeHeaderValue("application/json") }
                 }
             };
+
             using (var response = await client.SendAsync(request))
             {
                 response.EnsureSuccessStatusCode();

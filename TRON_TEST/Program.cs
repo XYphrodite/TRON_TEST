@@ -18,12 +18,12 @@ internal class Program
 
 
 
-        //await tronAPI.GetAccountInfo("TU7MEKqVWAzstPn3XqpN1bdsva6SKNq3AB");
-        //await tronAPI.GetTransactionInfo("TU7MEKqVWAzstPn3XqpN1bdsva6SKNq3AB");
-        //await tronAPI.GetContractTransactionInfo("TU7MEKqVWAzstPn3XqpN1bdsva6SKNq3AB");
+        await tronAPI.GetAccountInfo("TU1XvmdHLtqPCmsYNP1BkvEsZZFw12okeG");
+        await tronAPI.GetTransactionInfo("TU1XvmdHLtqPCmsYNP1BkvEsZZFw12okeG");
+        await tronAPI.GetContractTransactionInfo("TU1XvmdHLtqPCmsYNP1BkvEsZZFw12okeG");
         //await tronAPI.BroadcastTransaction();
         //await tronAPI.BroadcastHex();
-        await tronAPI.CreateTransaction();
+        //await tronAPI.CreateTransaction();
 
 
 
