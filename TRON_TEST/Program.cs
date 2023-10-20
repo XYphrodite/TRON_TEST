@@ -3,6 +3,7 @@ using TRON_TEST.Services;
 
 internal class Program
 {
+    static string walletAddress = "TU1XvmdHLtqPCmsYNP1BkvEsZZFw12okeG";
     private static async Task Main(string[] args)
     {
         var serviceProvider = new ServiceCollection()
@@ -18,12 +19,14 @@ internal class Program
 
 
 
-        await tronAPI.GetAccountInfo("TU1XvmdHLtqPCmsYNP1BkvEsZZFw12okeG");
-        await tronAPI.GetTransactionInfo("TU1XvmdHLtqPCmsYNP1BkvEsZZFw12okeG");
-        await tronAPI.GetContractTransactionInfo("TU1XvmdHLtqPCmsYNP1BkvEsZZFw12okeG");
+        //await tronAPI.GetAccountInfo("TU1XvmdHLtqPCmsYNP1BkvEsZZFw12okeG");
+        //await tronAPI.GetTransactionInfo("TU1XvmdHLtqPCmsYNP1BkvEsZZFw12okeG");
+        //await tronAPI.GetContractTransactionInfo("TU1XvmdHLtqPCmsYNP1BkvEsZZFw12okeG");
         //await tronAPI.BroadcastTransaction();
         //await tronAPI.BroadcastHex();
         //await tronAPI.CreateTransaction();
+        await tronAPI.GetWallet(walletAddress);
+
 
 
 

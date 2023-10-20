@@ -21,7 +21,7 @@ namespace TRON_TEST.Services
 #else
         private string _baseUrl = "https://api.trongrid.io/";
         private string _baseUrl_ = "https://api.trongrid.io/";
-        private string _tronApiKey = "25f66928-0b70-48cd-9ac6-da6f8247c663";
+        private string _tronApiKey = "";
 #endif
 
 
@@ -170,6 +170,28 @@ namespace TRON_TEST.Services
                 response.EnsureSuccessStatusCode();
                 var body = await response.Content.ReadAsStringAsync();
                 Console.WriteLine(body);
+            }
+        }
+        public async Task GetWallet(string walletAddress)
+        {
+            string apiUrl = "https://api.trongrid.io/v1/accounts/" + walletAddress;
+
+            using (HttpClient client = new HttpClient())
+            {
+                HttpResponseMessage response = await client.GetAsync(apiUrl);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    string content = await response.Content.ReadAsStringAsync();
+                    Console.WriteLine(content);
+                    var wallet = JsonSerializer.Deserialize<Root>(content);
+                    // Parse the JSON response to get the balance information.
+                    
+                }
+                else
+                {
+                    Console.WriteLine("Failed to retrieve balance.");
+                }
             }
         }
     }
