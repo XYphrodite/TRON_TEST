@@ -15,14 +15,15 @@ internal class Program
         var tronAPI = serviceProvider.GetRequiredService<TronAPI>();
 
         // Use the resolved services
-        logger.Log("Hello, Dependency Injection!");
+
 
 
         //await tronAPI.GetAccountInfo("TU7MEKqVWAzstPn3XqpN1bdsva6SKNq3AB");
         //await tronAPI.GetTransactionInfo("TU7MEKqVWAzstPn3XqpN1bdsva6SKNq3AB");
         //await tronAPI.GetContractTransactionInfo("TU7MEKqVWAzstPn3XqpN1bdsva6SKNq3AB");
-        await tronAPI.BroadcastTransaction();
-
+        //await tronAPI.BroadcastTransaction();
+        //await tronAPI.BroadcastHex();
+        await tronAPI.CreateTransaction();
 
 
 

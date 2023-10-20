@@ -3,69 +3,65 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace TRON_TEST.Models
 {
-    [DataContract]
     public class Parameter
     {
-        [DataMember(Name = "value")]
+        [JsonPropertyName("value")]
         public Value Value { get; set; }
 
-        [DataMember(Name = "type_url")]
+        [JsonPropertyName("type_url")]
         public string TypeUrl { get; set; }
     }
 
-    [DataContract]
     public class Value
     {
-        [DataMember(Name = "amount")]
+        [JsonPropertyName("amount")]
         public long Amount { get; set; }
 
-        [DataMember(Name = "owner_address")]
+        [JsonPropertyName("owner_address")]
         public string OwnerAddress { get; set; }
 
-        [DataMember(Name = "to_address")]
+        [JsonPropertyName("to_address")]
         public string ToAddress { get; set; }
     }
 
-    [DataContract]
     public class Contract
     {
-        [DataMember(Name = "parameter")]
+        [JsonPropertyName("parameter")]
         public Parameter Parameter { get; set; }
 
-        [DataMember(Name = "type")]
+        [JsonPropertyName("type")]
         public string Type { get; set; }
     }
 
-    [DataContract]
     public class RawData
     {
-        [DataMember(Name = "contract")]
+        [JsonPropertyName("contract")]
         public Contract[] Contract { get; set; }
 
-        [DataMember(Name = "ref_block_bytes")]
+        [JsonPropertyName("ref_block_bytes")]
         public string RefBlockBytes { get; set; }
 
-        [DataMember(Name = "ref_block_hash")]
+        [JsonPropertyName("ref_block_hash")]
         public string RefBlockHash { get; set; }
 
-        [DataMember(Name = "expiration")]
+        [JsonPropertyName("expiration")]
         public long Expiration { get; set; }
 
-        [DataMember(Name = "timestamp")]
+        [JsonPropertyName("timestamp")]
         public long Timestamp { get; set; }
     }
 
-    [DataContract]
     public class RootObject
     {
-        [DataMember(Name = "raw_data")]
+        [JsonPropertyName("raw_data")]
         public RawData RawData { get; set; }
 
-        [DataMember(Name = "raw_data_hex")]
+        [JsonPropertyName("raw_data_hex")]
         public string RawDataHex { get; set; }
     }
 }

@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
@@ -99,11 +100,7 @@ namespace TRON_TEST.Services
             };
 
             //request.AddJsonBody(JsonSerializer.Serialize(rootObject), false);
-            string jsonBody = JsonSerializer.Serialize(new
-            {
-                raw_data = JsonSerializer.Serialize(rootObject.RawData),
-                raw_data_hex = rootObject.RawDataHex
-            });
+            string jsonBody = JsonSerializer.Serialize(rootObject);
 
 
 
@@ -111,6 +108,41 @@ namespace TRON_TEST.Services
             var response = await client.PostAsync(request);
 
             logger.Log(response.Content);
+        }
+        public async Task BroadcastHex()
+        {
+            var options = new RestClientOptions(_baseUrl_ + "/wallet/broadcasthex");
+            var client = new RestClient(options);
+            var request = new RestRequest("");
+            request.AddHeader("accept", "application/json");
+            var jsonBody = JsonSerializer.Serialize(new
+            {
+                transaction = "0A8A010A0202DB2208C89D4811359A28004098A4E0A6B52D5A730802126F0A32747970652E676F6F676C65617069732E636F6D2F70726F746F636F6C2E5472616E736665724173736574436F6E747261637412390A07313030303030311215415A523B449890854C8FC460AB602DF9F31FE4293F1A15416B0580DA195542DDABE288FEC436C7D5AF769D24206412418BF3F2E492ED443607910EA9EF0A7EF79728DAAAAC0EE2BA6CB87DA38366DF9AC4ADE54B2912C1DEB0EE6666B86A07A6C7DF68F1F9DA171EEE6A370B3CA9CBBB00"
+            });
+            request.AddJsonBody(jsonBody, false);
+            var response = await client.PostAsync(request);
+
+            Console.WriteLine("{0}", response.Content);
+        }
+        public async Task CreateTransaction()
+        {
+            var client = new HttpClient();
+            var request = new HttpRequestMessage
+            {
+                Method = HttpMethod.Post,
+                RequestUri = new Uri(_baseUrl_ + "/wallet/createtransaction"),
+                Headers = { { "accept", "application/json" }, },
+                Content = new StringContent("{\"owner_address\":\"TZ4UXDV5ZhNW7fb2AMSbgfAEZ7hWsnYS2g\",\"to_address\":\"TPswDDCAWhJAZGdHPidFg5nEf8TkNToDX1\",\"amount\":1000,\"visible\":true}")
+                {
+                    Headers = { ContentType = new MediaTypeHeaderValue("application/json") }
+                }
+            };
+            using (var response = await client.SendAsync(request))
+            {
+                response.EnsureSuccessStatusCode();
+                var body = await response.Content.ReadAsStringAsync();
+                Console.WriteLine(body);
+            }
         }
     }
 }
