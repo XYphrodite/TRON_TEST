@@ -19,13 +19,16 @@ internal class Program
 
 
 
-        //await tronAPI.GetAccountInfo("TU1XvmdHLtqPCmsYNP1BkvEsZZFw12okeG");
-        //await tronAPI.GetTransactionInfo("TU1XvmdHLtqPCmsYNP1BkvEsZZFw12okeG");
-        //await tronAPI.GetContractTransactionInfo("TU1XvmdHLtqPCmsYNP1BkvEsZZFw12okeG");
+        //await tronAPI.GetAccountInfo(walletAddress);
+        //await tronAPI.GetTransactionInfo(walletAddress);
+        //await tronAPI.GetContractTransactionInfo(walletAddress);
         //await tronAPI.BroadcastTransaction();
         //await tronAPI.BroadcastHex();
         //await tronAPI.CreateTransaction();
-        await tronAPI.GetWallet(walletAddress);
+        //await tronAPI.GetWallet(walletAddress);
+        //await tronAPI.GetTRXTransacrions(walletAddress);
+        //await tronAPI.GetBalances(walletAddress);
+        await tronAPI.GetUsdtTransactions(walletAddress);
 
 
 

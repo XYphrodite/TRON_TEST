@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace TRON_TEST.Models
@@ -41,10 +42,6 @@ namespace TRON_TEST.Models
         public string type { get; set; }
     }
 
-    public class Trc20
-    {
-        public Dictionary<string,string> TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t { get; set; }
-    }
 
     public class Vote
     {
@@ -63,11 +60,31 @@ namespace TRON_TEST.Models
         public int free_net_usage { get; set; }
         public List<Frozen> frozenV2 { get; set; }
         public int balance { get; set; }
-        public Trc20 trc20 { get; set; }
+        public object trc20
+        {
+get; set;
+        }
         public long latest_consume_free_time { get; set; }
         public List<Vote> votes { get; set; }
         public long net_window_size { get; set; }
         public bool net_window_optimized { get; set; }
+
+        public double GetBalance()
+        {
+            return balance / Math.Pow(10, 6);
+        }
+
+        //public double GetUSDT()
+        //{
+        //    if (trc20 is not null)
+        //    {
+        //        var json = JsonSerializer.Serialize(trc20);
+        //        Console.WriteLine(json);
+        //        var d = JsonSerializer.Deserialize<object>(json);
+        //        return default(double);
+        //    }
+        //    return default(double);
+        //}
     }
 
     public class Meta

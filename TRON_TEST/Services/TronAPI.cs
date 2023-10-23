@@ -1,4 +1,5 @@
-﻿using RestSharp;
+﻿using Newtonsoft.Json;
+using RestSharp;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +10,7 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using TRON_TEST.Models;
 using static Program;
+using JsonSerializer = System.Text.Json.JsonSerializer;
 
 namespace TRON_TEST.Services
 {
@@ -21,7 +23,7 @@ namespace TRON_TEST.Services
 #else
         private string _baseUrl = "https://api.trongrid.io/";
         private string _baseUrl_ = "https://api.trongrid.io/";
-        private string _tronApiKey = "";
+        private string _tronApiKey = "16e358e8-151f-4255-8ce2-339ff1abee10";
 #endif
 
 
@@ -183,14 +185,115 @@ namespace TRON_TEST.Services
                 if (response.IsSuccessStatusCode)
                 {
                     string content = await response.Content.ReadAsStringAsync();
-                    Console.WriteLine(content);
+                    //Console.WriteLine(content);
                     var wallet = JsonSerializer.Deserialize<Root>(content);
+                    var item = wallet.data[0];
+                    Console.WriteLine($"Balance = {item.GetBalance()} Trx");
+                    //Console.WriteLine($"USDT = {item.GetUSDT()}");
                     // Parse the JSON response to get the balance information.
-                    
+
                 }
                 else
                 {
                     Console.WriteLine("Failed to retrieve balance.");
+                }
+            }
+        }
+        public async Task GetTRXTransacrions(string walletAddress)
+        {
+            using (HttpClient client = new HttpClient())
+            {
+                // TronScan API URL to get transactions by address
+                string apiUrl = $"https://api.tronscan.org/api/transaction?address={walletAddress}";
+
+                // Make an HTTP GET request to fetch the transactions
+                HttpResponseMessage response = await client.GetAsync(apiUrl);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    string responseContent = await response.Content.ReadAsStringAsync();
+                    // Process the response data (in JSON format) to extract transaction details
+                    // You can use a JSON parser library like Newtonsoft.Json to parse the response.
+
+                    Console.WriteLine(responseContent);
+
+                    TransactionRoot root = JsonConvert.DeserializeObject<TransactionRoot>(responseContent);
+
+                    // Now you can access the data using C# objects
+                    Console.WriteLine($"Total transactions: {root.total}");
+                    foreach (var transaction in root.data)
+                    {
+                        if (!string.IsNullOrEmpty(transaction.toAddress))
+                        {
+                            Console.WriteLine($"Transaction Hash: {transaction.hash}");
+                            Console.WriteLine($"Amount: {transaction.amount}");
+                            Console.WriteLine($"OwnerAdress: {transaction.ownerAddress}");
+                            Console.WriteLine($"ToAdress: {transaction.toAddress}");
+                            Console.WriteLine($"Confirmed: {transaction.confirmed}");
+                            if (transaction.tokenInfo is not null)
+                            {
+                                Console.WriteLine($"TokenName: {transaction.tokenInfo.tokenName}");
+                            }
+                            Console.WriteLine();
+                        }
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("Failed to fetch transactions for the wallet address.");
+                }
+            }
+        }
+        public async Task GetBalances(string walletAddress)
+        {
+            string apiUrl = $"https://apilist.tronscan.io/api/account?address={walletAddress}";
+            using (HttpClient client = new HttpClient())
+            {
+                
+                //client.DefaultRequestHeaders.Add("t", _tronApiKey);
+                HttpResponseMessage response = await client.GetAsync(apiUrl);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    string responseBody = await response.Content.ReadAsStringAsync();
+                    await Console.Out.WriteLineAsync(responseBody);
+                    var content = JsonConvert.DeserializeObject<TokenBalanceWrapper>(responseBody);
+                    Console.WriteLine(content.transactions); 
+                    // Parse the JSON data in responseBody to extract USDT transactions.
+                    // You'll need to navigate the JSON structure to find the relevant information.
+                    // Deserialize the JSON using Newtonsoft.Json or any other JSON parsing library.
+                }
+                else
+                {
+                    Console.WriteLine($"Error: {response.StatusCode}");
+                }
+            }
+        }
+        public async Task GetUsdtTransactions(string walletAddress)
+        {
+            string tronScanApiUrl = "https://apilist.tronscan.org/api";
+            string usdtContractAddress = "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t"; // USDT contract address on Tron
+
+            using (HttpClient client = new HttpClient())
+            {
+                try
+                {
+                    string url = $"{tronScanApiUrl}/account?address={walletAddress}&contractAddress={usdtContractAddress}";
+                    HttpResponseMessage response = await client.GetAsync(url);
+
+                    if (response.IsSuccessStatusCode)
+                    {
+                        string content = await response.Content.ReadAsStringAsync();
+                        Console.WriteLine(content);
+                    }
+                    else
+                    {
+                        Console.WriteLine($"Error: {response.StatusCode} - {response.ReasonPhrase}");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Exception: {ex.Message}");
                 }
             }
         }
