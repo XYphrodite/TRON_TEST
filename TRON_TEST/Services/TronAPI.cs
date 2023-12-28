@@ -271,14 +271,14 @@ namespace TRON_TEST.Services
         }
         public async Task GetUsdtTransactions(string walletAddress)
         {
-            string tronScanApiUrl = "https://apilist.tronscan.org/api";
             string usdtContractAddress = "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t"; // USDT contract address on Tron
 
             using (HttpClient client = new HttpClient())
             {
                 try
                 {
-                    string url = $"{tronScanApiUrl}/account?address={walletAddress}&contractAddress={usdtContractAddress}";
+
+                    string url = $"https://api.trongrid.io/v1/accounts/{walletAddress}/transactions/trc20?&contract_address={usdtContractAddress}";
                     HttpResponseMessage response = await client.GetAsync(url);
 
                     if (response.IsSuccessStatusCode)
